@@ -25,6 +25,7 @@ public class BookController {
 
     @PostMapping
     public Book create(@RequestBody Book input) {
+
         return service.create(input);
     } // TODO: @Valid, ResponseEntity 201
 
