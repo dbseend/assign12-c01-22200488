@@ -1,13 +1,21 @@
 # Week 12 Spring Boot REST API Advanced Customizing & Deployment
 
-## Project Information: 프로젝트 소개, GitHub URL, Render URL
+## 1. Project Information: 프로젝트 소개, GitHub URL, Render URL
+
+### 프로젝트 소개
+- 도서(Book) 정보를 관리하는 Spring Boot REST API (JPA CRUD)를 고도화한 프로젝트
+- ResponseEntity로 HTTP 상태 코드(201, 204 등)를 반환 추가
+- @Valid 기반 입력 검증, @RestControllerAdvice 기반 공통 예외 처리(400, 404)
+- Pageable 기반 페이징/정렬 적용g
+- springdoc-openapi로 Swagger UI와 OpenAPI 명세를 제공하여 API 문서화
+ 
 | 구분 | 링크                                                         |
 | :--- |:-----------------------------------------------------------|
 | **Render 배포 URL** | https://assign11-c01-22200488.onrender.com                 |
 | GitHub (Organization) | https://github.com/2026-2-WebService/assign11-c01-22200488 |
 | GitHub (Personal) | https://github.com/dbseend/assign11-c01-22200488           |
 
-## Installation: Java/DB 환경과 실행 방법
+## 2. Installation: Java/DB 환경과 실행 방법
 - Java 17 필요
 - Gradle 8.x 설치 후 `gradle bootRun` (프로젝트에는 공식 Gradle Wrapper 바이너리가 포함되지 않았습니다.)
 - 기본값은 학습 편의상 메모리 H2 DB입니다. 재시작 시 데이터가 초기화됩니다.
@@ -18,7 +26,7 @@
   - 처음 DB 생성 시에만 `DDL_AUTO=update` (이후 `validate` 권장)
 - **Render 배포**에서는 DB_URL/DB_USERNAME/DB_PASSWORD와 `SPRING_PROFILES_ACTIVE=mariadb`, `DDL_AUTO=validate`를 설정하고, 외부 MariaDB 접근을 사전에 확인하세요.
 
-## Source Code Exploration: 분석 질문 8개 답변, 주석 작성한 메서드 3개
+## 3. Source Code Exploration: 분석 질문 8개 답변, 주석 작성한 메서드 3개
 ### Project Structure & JPA
 1. BookController, BookService, BookRepository의 역할과 요청 처리 흐름을 설명하세요.
   - PostController는 파일 관련 CRUD 요청을 처리하는 컨트롤러로, 파일 업로드·수정·삭제와 업로드된 파일의 목록 조회·상세 조회를 담당한다.
@@ -52,7 +60,7 @@
    - /v3/api-docs는 API의 URL, HTTP Method, 요청/응답 구조를 기술한 OpenAPI JSON 명세를 반환하는 주소이다.
    - /swagger-ui.html은 그 명세를 웹 화면에 표시하며 브라우저에서 API를 직접 테스트하는 Swagger UI 접속 주소이다.
 
-## Refactoring: DTO와 ResponseEntity 변경 전/후
+## 4. Refactoring: DTO와 ResponseEntity 변경 전/후
 ### DTO
 - 기존: 필드에 대해서 유효성 검사 없음
 ```
@@ -104,7 +112,7 @@ public ResponseEntity<Void> delete(@PathVariable Long id) {
 }
 ```
 
-## New Features: Validation, 공통 예외 처리, Pagination/Sorting, Swagger
+## 5. New Features: Validation, 공통 예외 처리, Pagination/Sorting, Swagger
 ### Validation
 - BookRequest의 title, author가 공백이면 거부, price가 음수이면 거부
 - Controller에서 @Valid @RequestBody로 검증하고, 실패 시 MethodArgumentNotValidException이 발생하여 400 Bad Request 반환
@@ -135,7 +143,7 @@ public ResponseEntity<Void> delete(@PathVariable Long id) {
 - Swagger UI: http://localhost:8080/swagger-ui.html, OpenAPI JSON 명세: `http://localhost:8080/v3/api-docs`
 - @Tag(도서 관리 API)와 @Operation(도서 추가·목록 조회·단건 조회·수정·삭제)으로 API 설명 추가
 
-## Testing & Deployment: results/ 스크린샷 6장 이상 및 배포 URL
+## 6. Testing & Deployment: results/ 스크린샷 6장 이상 및 배포 URL
 
 - 배포 URL: https://assign11-c01-22200488.onrender.com
 
@@ -167,13 +175,17 @@ public ResponseEntity<Void> delete(@PathVariable Long id) {
 - DELETE 삭제 (204)
 ![10_crud_delete_204](results/10_crud_delete_204.png)
 
-## Weekly Review: 새롭게 배운 내용 3가지, 어려웠던 점과 해결 방법, AI 활용 내용 및 느낀 점
+## 7. Weekly Review: 새롭게 배운 내용 3가지, 어려웠던 점과 해결 방법, AI 활용 내용 및 느낀 점
 ### 새롭게 배운 내용 3가지
 1. @Valid를 통해 필드의 유효성 검사를 일일이 직접하지 않고 어노테이션을 사용해서 효과적으로 관리할 수 있음.
 2. ExceptionHandler를 통해서 각 예외마다 따로 처리하는 것이 아니라 한번에 모아서 처리할 수 있음.
 3. Swagger와 같은 API 문서 제작을 통해 다른 사람과 협업 할 때 유용하게 사용할 수 있음.
 
 ### 어려웠던 점과 해결 방법
-- 
+- DTO 적용 후 repository.save(request)에서 "Inferred type 'S' ... should extend 'Book'" 오류가 발생함
+- 원인: save()는 Entity만 받는데 Request DTO를 그대로 전달함
+- 해결: Service에서 Request DTO를 Entity로 변환한 뒤 저장하고, 결과를 Response DTO로 변환하여 반환
 
 ### AI 활용 내용 및 느낀 점
+- 활용 내용: ResponseEntity 응답 코드별 예시 코드 작성
+- 느낀 점: 단순한 기능 구현을 넘어서 실제 협업 시 사용할 수 있는 내용(Exception, Swagger)들을 공부할 수 있었음.

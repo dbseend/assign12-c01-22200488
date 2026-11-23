@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Tag(name = "Book", description = "도서 관리 API")               // Swagger UI 그룹 이름/설명
+@Tag(name = "Book", description = "도서 관리 API")
 @RestController
 @RequestMapping("/api/books")
 public class BookController {
