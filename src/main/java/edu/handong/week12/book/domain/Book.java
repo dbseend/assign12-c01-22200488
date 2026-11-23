@@ -1,4 +1,4 @@
-package edu.handong.week12.book;
+package edu.handong.week12.book.domain;
 
 import jakarta.persistence.*;
 
