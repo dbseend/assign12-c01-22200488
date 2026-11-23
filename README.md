@@ -6,13 +6,13 @@
 - 도서(Book) 정보를 관리하는 Spring Boot REST API (JPA CRUD)를 고도화한 프로젝트
 - ResponseEntity로 HTTP 상태 코드(201, 204 등)를 반환 추가
 - @Valid 기반 입력 검증, @RestControllerAdvice 기반 공통 예외 처리(400, 404)
-- Pageable 기반 페이징/정렬 적용g
+- Pageable 기반 페이징/정렬 적용
 - springdoc-openapi로 Swagger UI와 OpenAPI 명세를 제공하여 API 문서화
  
 | 구분 | 링크                                                         |
 | :--- |:-----------------------------------------------------------|
-| **Render 배포 URL** | https://assign12-c01-22200488.onrender.com                |
-| GitHub (Organization) | https://github.com/2026-2-WebService/assign11-c01-22200488 |
+| **Render 배포 URL** | https://assign12-c01-22200488.onrender.com                 |
+| GitHub (Organization) | https://github.com/2026-2-WebService/assign12-c01-22200488 |
 | GitHub (Personal) | https://github.com/dbseend/assign12-c01-22200488           |
 
 ## 2. Installation: Java/DB 환경과 실행 방법
@@ -28,15 +28,19 @@
 
 ## 3. Source Code Exploration: 분석 질문 8개 답변, 주석 작성한 메서드 3개
 ### Project Structure & JPA
+- 참조 소스파일: BookController.java, BookService.java, BookRepository.java
+
 1. BookController, BookService, BookRepository의 역할과 요청 처리 흐름을 설명하세요.
-  - PostController는 파일 관련 CRUD 요청을 처리하는 컨트롤러로, 파일 업로드·수정·삭제와 업로드된 파일의 목록 조회·상세 조회를 담당한다.
-  - PostService는 컨트롤러가 요청한 기능을 실제로 수행하는 비즈니스 로직을 담당한다.
-  - PostRepository는 서비스의 비즈니스 로직을 거친 뒤, 데이터베이스에 파일 관련 데이터를 저장하고 조회하는 역할을 담당한다.
+  - BookController 책 관련 CRUD 요청을 처리하는 컨트롤러로, 책 등록, 수정, 삭제 조회를 담당한다.
+  - BookService 컨트롤러가 요청한 기능을 실제로 수행하는 비즈니스 로직을 담당한다.
+  - BookRepository의 서비스의 비즈니스 로직을 거친 뒤, 데이터베이스에 책 데이터를 저장하고 조회하는 역할을 담당한다.
   - Controller → Service → Repository로 이어지는 계층별 역할 분리를 통해 계층 간 결합도를 낮추고 모듈화를 달성한다.
 2. JpaRepository<Book, Long>만 선언해도 findAll(), save()를 사용할 수 있는 이유를 설명하세요.
   - JpaRepository를 상속 받을 시 save(), findAll()와 같은 기본 메소드는 프로그램 실행 시 런타임 환경에서 자동으로 구현되기 때문에 구현없이 선언만으로 사용할 수 있다.
 
 ### DTO & HTTP Response
+- 참조 소스파일: BookController.java, BookRequest.java, BookResponse.java
+
 3. 기존 API가 Book Entity를 직접 요청·응답에 사용할 때 발생할 수 있는 문제를 설명하세요. 
   - Entity를 직접 사용하는 경우 보안(ID 등 서버 관리 필드의 노출·변경 위험), 결합도(Entity 변경이 API 구조에 영향), 데이터 노출(불필요한 필드까지 노출), 직렬화(연관관계로 인한 순환 참조) 문제가 발생할 수 있다.
 4. Request DTO와 Response DTO를 분리하는 이유와 ResponseEntity가 필요한 상황을 설명하세요.
@@ -44,6 +48,8 @@
    - ResponseEntity는 200 외에 201,204,404처럼 다양한 상태 코드,헤더,본문을 직접 제어해야 할 때 사용한다 .
 
 ### Validation & Exception Handling
+- 참조 소스파일: BookController.java, BookRequest.java, ApiError.java, BookNotFoundException.java, GlobalExceptionhandler.java
+
 5. @Valid, @NotBlank, @Min은 각각 어느 시점에 어떤 동작을 수행하나요?
     - @Valid는 컨트롤러에서 @RequestBody가 JSON을 Request DTO로 변환한 직후, 메서드 실행 전에 DTO의 검증 규칙을 검사한다(통과하면 메서드 실행, 실패하면 예외 발생). 
     - @NotBlank(null, 빈 문자열, 공백 문자열 불허)와 @Min(숫자의 최솟값 제한)은 DTO 필드에 선언하는 규칙이다.
@@ -53,6 +59,8 @@
    - @RestControllerAdvice 클래스의 @ExceptionHandler 메서드가 예외 유형별로 받아 ResponseEntity로 적절한 상태 코드(404 등)와 일관된 ApiError 응답을 반환한다.
 
 ### Pagination & OpenAPI
+- 참조 소스파일: BookController.java, BookService.java, BookRepository.java
+
 7. Pageable과 Page<T>는 각각 어떤 역할을 하며 sort=price,desc는 어떻게 처리되나요?
   - Pageable은 페이지 번호, 페이지 크기, 정렬 정보를 전달하는 인터페이스이고, Page<T>는 조회된 데이터와 전체 페이지 수 등 페이징 정보를 함께 담아 돌려주는 결과 객체이다. 
   - sort=price,desc는 Pageable의 정렬 정보로 전달되어 가격 기준 내림차순으로 정렬하겠다는 것을 명시한 것이다.
@@ -145,7 +153,7 @@ public ResponseEntity<Void> delete(@PathVariable Long id) {
 
 ## 6. Testing & Deployment: results/ 스크린샷 6장 이상 및 배포 URL
 
-- 배포 URL: https://assign11-c01-22200488.onrender.com
+- 배포 URL: https://assign12-c01-22200488.onrender.com
 
 ### 1. 초기 Sample CRUD 테스트
 ![01_sample](results/01_sample.png)

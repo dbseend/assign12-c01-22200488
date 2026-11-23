@@ -7,6 +7,7 @@ import edu.handong.week12.book.service.BookService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -26,19 +27,22 @@ public class BookController {
         this.service = service;
     }
 
-
+    // Swagger(OpenAPI) 문서에서 해당 API 엔드포인트의 요약 설명을 "도서 추가"로 지정
     @Operation(summary = "도서 추가")
     @PostMapping
+    // 요청 본문(@RequestBody)의 JSON 데이터를 BookRequest DTO로 역직렬화하고, @Valid로 유효성 검사를 수행
     public ResponseEntity<BookResponse> create(@Valid @RequestBody BookRequest bookRequest) {
 
+        // HTTP 응답 상태: 201(Created)
         return ResponseEntity
                 .status(HttpStatus.CREATED)
+                // 서비스 계층에 도서 생성을 비즈니스 로직을 전달한 뒤 반환된 BookResponse DTO를 응답 본문(Body)에 담아 반환
                 .body(service.create(bookRequest));
     }
 
     @Operation(summary = "도서 목록 조회")
     @GetMapping
-    public ResponseEntity<List<BookResponse>> list(@PageableDefault(size = 5, sort = "price", direction = Sort.Direction.DESC) Pageable pageable) {
+    public ResponseEntity<Page<BookResponse>> list(@PageableDefault(size = 5, sort = "price", direction = Sort.Direction.DESC) Pageable pageable) {
         return ResponseEntity.ok(service.findAll(pageable));
     }
 
@@ -50,7 +54,7 @@ public class BookController {
 
     @Operation(summary = "도서 수정")
     @PutMapping("/{id}")
-    public ResponseEntity<BookResponse> update(@PathVariable Long id, @RequestBody Book input) {
+    public ResponseEntity<BookResponse> update(@PathVariable Long id, @Valid @RequestBody BookRequest input) {
         return ResponseEntity.ok(service.update(id, input));
     }
 
