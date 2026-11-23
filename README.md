@@ -11,9 +11,9 @@
  
 | 구분 | 링크                                                         |
 | :--- |:-----------------------------------------------------------|
-| **Render 배포 URL** | https://assign11-c01-22200488.onrender.com                 |
+| **Render 배포 URL** | https://assign12-c01-22200488.onrender.com                |
 | GitHub (Organization) | https://github.com/2026-2-WebService/assign11-c01-22200488 |
-| GitHub (Personal) | https://github.com/dbseend/assign11-c01-22200488           |
+| GitHub (Personal) | https://github.com/dbseend/assign12-c01-22200488           |
 
 ## 2. Installation: Java/DB 환경과 실행 방법
 - Java 17 필요
