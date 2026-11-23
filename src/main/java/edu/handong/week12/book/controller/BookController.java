@@ -36,7 +36,7 @@ public class BookController {
         // HTTP 응답 상태: 201(Created)
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                // 서비스 계층에 도서 생성을 비즈니스 로직을 전달한 뒤 반환된 BookResponse DTO를 응답 본문(Body)에 담아 반환
+                // 서비스 계층에 도서 생성 비즈니스 로직을 전달한 뒤 반환된 BookResponse DTO를 응답 본문(Body)에 담아 반환
                 .body(service.create(bookRequest));
     }
 

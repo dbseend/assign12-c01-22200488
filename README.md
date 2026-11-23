@@ -29,7 +29,6 @@
 ## 3. Source Code Exploration: 분석 질문 8개 답변, 주석 작성한 메서드 3개
 ### Project Structure & JPA
 - 참조 소스파일: BookController.java, BookService.java, BookRepository.java
-
 1. BookController, BookService, BookRepository의 역할과 요청 처리 흐름을 설명하세요.
   - BookController 책 관련 CRUD 요청을 처리하는 컨트롤러로, 책 등록, 수정, 삭제 조회를 담당한다.
   - BookService 컨트롤러가 요청한 기능을 실제로 수행하는 비즈니스 로직을 담당한다.
@@ -40,7 +39,6 @@
 
 ### DTO & HTTP Response
 - 참조 소스파일: BookController.java, BookRequest.java, BookResponse.java
-
 3. 기존 API가 Book Entity를 직접 요청·응답에 사용할 때 발생할 수 있는 문제를 설명하세요. 
   - Entity를 직접 사용하는 경우 보안(ID 등 서버 관리 필드의 노출·변경 위험), 결합도(Entity 변경이 API 구조에 영향), 데이터 노출(불필요한 필드까지 노출), 직렬화(연관관계로 인한 순환 참조) 문제가 발생할 수 있다.
 4. Request DTO와 Response DTO를 분리하는 이유와 ResponseEntity가 필요한 상황을 설명하세요.
@@ -48,8 +46,7 @@
    - ResponseEntity는 200 외에 201,204,404처럼 다양한 상태 코드,헤더,본문을 직접 제어해야 할 때 사용한다 .
 
 ### Validation & Exception Handling
-- 참조 소스파일: BookController.java, BookRequest.java, ApiError.java, BookNotFoundException.java, GlobalExceptionhandler.java
-
+- 참조 소스파일: BookController.java, BookRequest.java, ApiError.java, BookNotFoundException.java, GlobalExceptionHandler.java
 5. @Valid, @NotBlank, @Min은 각각 어느 시점에 어떤 동작을 수행하나요?
     - @Valid는 컨트롤러에서 @RequestBody가 JSON을 Request DTO로 변환한 직후, 메서드 실행 전에 DTO의 검증 규칙을 검사한다(통과하면 메서드 실행, 실패하면 예외 발생). 
     - @NotBlank(null, 빈 문자열, 공백 문자열 불허)와 @Min(숫자의 최솟값 제한)은 DTO 필드에 선언하는 규칙이다.
@@ -60,7 +57,6 @@
 
 ### Pagination & OpenAPI
 - 참조 소스파일: BookController.java, BookService.java, BookRepository.java
-
 7. Pageable과 Page<T>는 각각 어떤 역할을 하며 sort=price,desc는 어떻게 처리되나요?
   - Pageable은 페이지 번호, 페이지 크기, 정렬 정보를 전달하는 인터페이스이고, Page<T>는 조회된 데이터와 전체 페이지 수 등 페이징 정보를 함께 담아 돌려주는 결과 객체이다. 
   - sort=price,desc는 Pageable의 정렬 정보로 전달되어 가격 기준 내림차순으로 정렬하겠다는 것을 명시한 것이다.

@@ -35,7 +35,7 @@ public class BookService {
     // id 로 단건 도서를 조회하여 응답 DTO(BookResponse)로 반환하는 메소드
     public BookResponse findById(Long id) {
         // repository.findById(id): DB에서 해당 ID의 Book 엔티티를 Optional<Book> 형태로 조회
-        // .map(BookResponse::from): 조회된 엔티티가 존재하면 from 함수를를 통해 BookResponse DTO로 변환
+        // .map(BookResponse::from): 조회된 엔티티가 존재하면 from 함수를 통해 BookResponse DTO로 변환
         return repository.findById(id)
                 .map(BookResponse::from)
                 // .orElseThrow(...): 조회된 데이터가 없으면 BookNotFoundException 예외를 발생
