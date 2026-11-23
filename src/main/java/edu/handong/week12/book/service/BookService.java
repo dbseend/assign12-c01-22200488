@@ -5,6 +5,7 @@ import edu.handong.week12.book.dto.BookResponse;
 import edu.handong.week12.book.exception.BookNotFoundException;
 import edu.handong.week12.book.repository.BookRepository;
 import edu.handong.week12.book.domain.Book;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,8 +25,8 @@ public class BookService {
         return BookResponse.from(repository.save(newBook));
     }
 
-    public List<BookResponse> findAll() {
-        return repository.findAll().stream().map(BookResponse::from).toList();
+    public List<BookResponse> findAll(Pageable pageable) {
+        return repository.findAll(pageable).stream().map(BookResponse::from).toList();
     } // TODO STEP 6: Pagination/Sorting
 
     public BookResponse findById(Long id) {
